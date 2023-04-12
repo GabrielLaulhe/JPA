@@ -47,7 +47,7 @@ public class LibroDAO extends DAO<Libro> {
     
     public Libro buscarPorAutor(String nombre) throws Exception {
         conectar();
-        Libro libro = (Libro) em.createQuery("SELECT l FROM Libro l WHERE l.autor.nombre LIKE :Autor").setParameter("titulo", "%" + titulo+ "%").getSingleResult();
+        Libro libro = (Libro) em.createQuery("SELECT l FROM Libro l WHERE l.autor.nombre LIKE :Autor").setParameter("titulo", "%" + nombre + "%").getSingleResult();
         desconectar();
         return libro;
     }
