@@ -5,6 +5,7 @@
 package libreria.servicios;
 
 import java.util.Scanner;
+import libreria.entidades.Libro;
 
 /**
  *
@@ -13,6 +14,12 @@ import java.util.Scanner;
 public class servicioMenu {
 
     Scanner leer = new Scanner(System.in);
+    servicioAutor servA;
+    servicioLibro servL;
+    public servicioMenu() {
+        servA = new servicioAutor();
+        servL = new servicioLibro();
+    }
 
     public void menu() {
         System.out.println("------------MENU BIBLIOTECA-------------");
@@ -27,16 +34,31 @@ public class servicioMenu {
         Integer opc = leer.nextInt();
         switch (opc) {
             case 1:
-                
+                servA.buscarAutorNombre();
+                menu();
                 break;
             case 2:
-
+                try {
+                    Libro libro = new Libro();
+                    System.out.println("Ingrese el isbn");
+                    long isbn = leer.nextLong();
+                    libro = servL.buscarLibroISBN(isbn);
+                    if (libro==null) {
+                        System.out.println("El libro ingresado no existe");
+                    }else{
+                        System.out.println(libro);
+                    }
+            } catch (Exception e) {
+                    System.out.println("Error" + e.getMessage());
+            }
+                menu();
                 break;
             case 3:
-
+                servL.buscarLibroTitulo();
+                menu();
                 break;
             case 4:
-
+                
                 break;
             case 5:
 

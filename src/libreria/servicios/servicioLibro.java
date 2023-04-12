@@ -11,6 +11,7 @@ import javax.persistence.Persistence;
 import libreria.entidades.Autor;
 import libreria.entidades.Editorial;
 import libreria.entidades.Libro;
+import libreria.persistencia.LibroDAO;
 
 
 /**
@@ -31,18 +32,17 @@ public class servicioLibro {
 //    @ManyToOne
 //    private Editorial editorial;
     Scanner leer = new Scanner(System.in);
-    //EntityManager em = Persistence.createEntityManagerFactory("LibreriaPU").createEntityManager(); // lo mismo que la linea 19 y 20
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("LibreriaPU");
-    EntityManager em = emf.createEntityManager();
     
+    LibroDAO dao;
     servicioAutor sa;
     servicioEditorial se;
     public servicioLibro() {
         sa = new servicioAutor();
         se = new servicioEditorial();
+        dao = new LibroDAO();
     }
     
-    public Libro crearLibro() {
+    public Libro crearLibro() throws Exception {
         System.out.println("Ingrese el titulo del libro");
         String titulo = leer.next();
         System.out.println("Ingrese el anio");
@@ -50,9 +50,8 @@ public class servicioLibro {
         System.out.println("Ingrese la cantidad de ejemplares que hay en stock");
         int cantEjemplares = leer.nextInt();
         
-        System.out.println("Ingrese el nombre de autor");
-        String nombre = leer.next();
-        Autor a = sa.validarAutor(nombre);
+        
+        Autor a = sa.validarAutor();
         
         System.out.println("Ingrese el nombre de la editorial");
         String nombre1 = leer.next();
@@ -60,14 +59,49 @@ public class servicioLibro {
         return new Libro(titulo, anio, cantEjemplares, a, e);  
     }
     
-    public void guardarLibro() {
-        Libro l = crearLibro();
-        em.getTransaction().begin();
-        em.persist(l);
-        em.getTransaction().commit();
-        
+    public void guardarLibro() throws Exception {
+        Libro libro = crearLibro();
+        dao.guardar(libro);
     }
     
+    public Libro buscarLibroISBN(Long isbn) throws Exception {
+        Libro libro = null;
+        try {
+            libro = dao.buscarPorISBN(isbn);
+            return libro;
+        } catch (Exception e) {
+            System.out.println("Error" + e.getMessage());
+            return libro;
+        }
+    }
     
+    public Libro buscarLibroTitulo() {
+        try {
+            System.out.println("Ingrese el titulo del libro");
+            String titulo = leer.next();
+            if (titulo==null) {
+                System.out.println("Debe ingresar un nombre");
+                buscarLibroTitulo();
+            }
+            return dao.buscarPorNombre(titulo);
+        } catch (Exception e) {
+            System.out.println("Error" + e.getMessage());
+            return null;
+        }
+    }
     
+    public Libro buscarLibroPorAutor() {
+        
+        try {
+            System.out.println("Ingrese el autor");
+            String autor = leer.next();
+            if (autor==null) {
+                System.out.println("Debe ingresar un nombre");
+                buscarLibroPorAutor();
+            }
+            
+        } catch (Exception e) {
+        }
+        
+    }
 }

@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import libreria.entidades.Editorial;
+import libreria.persistencia.EditorialDAO;
 
 
 /**
@@ -17,40 +18,42 @@ import libreria.entidades.Editorial;
  */
 public class servicioEditorial {
     Scanner leer = new Scanner(System.in);
-    //EntityManager em = Persistence.createEntityManagerFactory("LibreriaPU").createEntityManager(); // lo mismo que la linea 19 y 20
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("LibreriaPU");
-    EntityManager em = emf.createEntityManager();
+    EditorialDAO dao;
+    
+    public servicioEditorial() {
+        dao = new EditorialDAO();
+    }
 
-    public void guardarEditorial(String nombre) {
-        
-        Editorial e = new Editorial();
-        e.setNombre(nombre);
-        
-        em.getTransaction().begin();
-        em.persist(e);
-        em.getTransaction().commit();
-        
-    }
-    
-    public Editorial buscarEditorialId(Integer id) {
-        Editorial e1 = (Editorial) em.createQuery("SELECT a FROM Editorial a "
-                                            + "WHERE a.id = :id").setParameter("id", id).getSingleResult();
-        return e1;
-    }
-    
-    public Editorial buscarEditorialNombre(String nombre) {
-        Editorial e1 = (Editorial) em.createQuery("SELECT a FROM Editorial a "
-                                            + "WHERE a.nombre = :nombre").setParameter("nombre", nombre).getSingleResult();
-        return e1;
-    }
-    
-    public Editorial validarEditorial(String nombre) {
-        Editorial e = buscarEditorialNombre(nombre);
-        if (e==null) {
-            guardarEditorial(nombre);
-            return buscarEditorialNombre(nombre);
+            
+    public Editorial guardarEditorial(String nombre1) {
+        Editorial editorial = null;
+        try {
+            
+            editorial = dao.buscarPorNombre(nombre1);
+            return editorial;
+        } catch (Exception e) {
+            System.out.println("Error" + e.getMessage());
+            return editorial;
         }
+    }
+    
+//    public Editorial buscarEditorialId(Integer id) {
+//       
+//    }
+    
+    public Editorial buscarEditorialNombre(String nombre) throws Exception {
+        Editorial e = null;
+        e = dao.buscarPorNombre(nombre);
         return e;
+    }
+    
+    public Editorial validarEditorial(String nombre1) throws Exception {
+        Editorial e = buscarEditorialNombre(nombre1);
+        if (e == null) {
+           return guardarEditorial(nombre1);
+        }else {
+            return e;
+        }
     }
     
 }

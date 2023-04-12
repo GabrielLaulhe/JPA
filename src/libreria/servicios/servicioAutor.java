@@ -17,32 +17,32 @@ import libreria.persistencia.AutorDAO;
  * @author Asus
  */
 public class servicioAutor {
+
     Scanner leer = new Scanner(System.in);
-    
+
     AutorDAO dao;
-    
+
     public servicioAutor() {
         dao = new AutorDAO();
-        
+
     }
-    
-    public void guardarAutor() {
+
+    public Autor guardarAutor() {
+        Autor a = new Autor();
         try {
-            Autor a = new Autor();
             System.out.println("Ingrese el nombre del autor");
             String nombre = leer.next();
             a.setNombre(nombre);
             dao.guardar(a);
+            return a;
         } catch (Exception e) {
             System.out.println("Error al crear autor" + e.getMessage());
+            return a;
         }
     }
-    
-    public Autor buscarAutorId(Integer id) {
-      
-        
-    }
-    
+
+//    public Autor buscarAutorId(Integer id) {
+//    }
     public Autor buscarAutorNombre() {
         Autor autor = null;
         try {
@@ -59,14 +59,16 @@ public class servicioAutor {
             return autor;
         }
     }
-    
-    public Autor validarAutor(String nombre) {
-        Autor a = buscarAutorNombre(nombre);
-        if (a==null) {
-            guardarAutor(nombre);
-            return buscarAutorNombre(nombre);
+
+    public Autor validarAutor() {
+        Autor a = buscarAutorNombre();
+        if (a == null) {
+            System.out.println("No se encontro ningun autor");
+            return guardarAutor();
+        } else {
+            return a;
         }
-        return a;
+
     }
 
 }

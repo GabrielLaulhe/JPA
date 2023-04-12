@@ -44,4 +44,11 @@ public class LibroDAO extends DAO<Libro> {
         desconectar();
         return libro;
     }
+    
+    public Libro buscarPorAutor(String nombre) throws Exception {
+        conectar();
+        Libro libro = (Libro) em.createQuery("SELECT l FROM Libro l WHERE l.autor.nombre LIKE :Autor").setParameter("titulo", "%" + titulo+ "%").getSingleResult();
+        desconectar();
+        return libro;
+    }
 }
