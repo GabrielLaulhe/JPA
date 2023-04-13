@@ -4,6 +4,8 @@
  */
 package libreria.servicios;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Scanner;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,13 +15,12 @@ import libreria.entidades.Editorial;
 import libreria.entidades.Libro;
 import libreria.persistencia.LibroDAO;
 
-
 /**
  *
  * @author Asus
  */
 public class servicioLibro {
-    
+
 //    private Long isbn;
 //    private String titulo;
 //    private Integer anio;
@@ -32,16 +33,17 @@ public class servicioLibro {
 //    @ManyToOne
 //    private Editorial editorial;
     Scanner leer = new Scanner(System.in);
-    
+
     LibroDAO dao;
     servicioAutor sa;
     servicioEditorial se;
+
     public servicioLibro() {
         sa = new servicioAutor();
         se = new servicioEditorial();
         dao = new LibroDAO();
     }
-    
+
     public Libro crearLibro() throws Exception {
         System.out.println("Ingrese el titulo del libro");
         String titulo = leer.next();
@@ -49,21 +51,20 @@ public class servicioLibro {
         int anio = leer.nextInt();
         System.out.println("Ingrese la cantidad de ejemplares que hay en stock");
         int cantEjemplares = leer.nextInt();
-        
-        
+
         Autor a = sa.validarAutor();
-        
+
         System.out.println("Ingrese el nombre de la editorial");
         String nombre1 = leer.next();
         Editorial e = se.validarEditorial(nombre1);
-        return new Libro(titulo, anio, cantEjemplares, a, e);  
+        return new Libro(titulo, anio, cantEjemplares, a, e);
     }
-    
+
     public void guardarLibro() throws Exception {
         Libro libro = crearLibro();
         dao.guardar(libro);
     }
-    
+
     public Libro buscarLibroISBN(Long isbn) throws Exception {
         Libro libro = null;
         try {
@@ -74,12 +75,12 @@ public class servicioLibro {
             return libro;
         }
     }
-    
+
     public Libro buscarLibroTitulo() {
         try {
             System.out.println("Ingrese el titulo del libro");
             String titulo = leer.next();
-            if (titulo==null) {
+            if (titulo == null) {
                 System.out.println("Debe ingresar un nombre");
                 buscarLibroTitulo();
             }
@@ -89,19 +90,54 @@ public class servicioLibro {
             return null;
         }
     }
-    
-    public Libro buscarLibroPorAutor() {
-        
+
+    /**
+     *
+     * @return
+     */
+    public Collection<Libro> buscarLibroPorAutor() {
+
         try {
             System.out.println("Ingrese el autor");
             String autor = leer.next();
-            if (autor==null) {
+            if (autor == null) {
                 System.out.println("Debe ingresar un nombre");
                 buscarLibroPorAutor();
             }
-            
+            return dao.buscarPorAutor(autor);
         } catch (Exception e) {
+            System.out.println("Error" + e.getMessage());
+            return null;
         }
-        
+    }
+    
+    public Collection<Libro> buscarLibroPorEditorial() {
+
+        try {
+            System.out.println("Ingrese la editorial ");
+            String editorial = leer.next();
+            if (editorial == null) {
+                System.out.println("Debe ingresar un nombre");
+                buscarLibroPorEditorial();
+            }
+            return dao.buscarPorAutor(editorial);
+        } catch (Exception e) {
+            System.out.println("Error" + e.getMessage());
+            return null;
+        }
+    }
+
+    public void mostrarListaLibroAutor() {
+        ArrayList<Libro> listaLibro = (ArrayList<Libro>) buscarLibroPorAutor();
+        for (Libro libros : listaLibro) {
+            System.out.println(libros);
+        }
+    }
+    
+    public void mostrarListaLibroEditorial() {
+        ArrayList<Libro> listaLibro = (ArrayList<Libro>) buscarLibroPorEditorial();
+        for (Libro libros : listaLibro) {
+            System.out.println(libros);
+        }
     }
 }

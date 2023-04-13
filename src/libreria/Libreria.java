@@ -17,17 +17,19 @@ public class Libreria {
 
     public static Scanner leer = new Scanner(System.in).useDelimiter("\n");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
-        servicioAutor sa = new servicioAutor();
-        servicioEditorial se = new servicioEditorial();
-        servicioLibro sl = new servicioLibro();
-        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("LibreriaPU");
+//        servicioAutor sa = new servicioAutor();
+//        servicioEditorial se = new servicioEditorial();
+//        servicioLibro sl = new servicioLibro();
+//        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("LibreriaPU");
         //EntityManager em = emf.createEntityManager();
         
        // se.guardarEditorial("uno");
         //se.guardarEditorial("dos");
-        sl.guardarLibro();
+        servicioLibro servL = new servicioLibro();
+        long l = 1;
+        servL.buscarLibroISBN(l);
         
     }
 

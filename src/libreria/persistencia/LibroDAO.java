@@ -4,6 +4,7 @@
  */
 package libreria.persistencia;
 
+import java.util.Collection;
 import java.util.List;
 import libreria.entidades.Libro;
 
@@ -33,7 +34,7 @@ public class LibroDAO extends DAO<Libro> {
 
     public Libro buscarPorISBN(Long isbn) throws Exception {
         conectar();
-        Libro libro = (Libro) em.createQuery("SELECT l FROM Libro l WHERE l.isbn LIKE :isbn").setParameter("isbn", isbn).getSingleResult();
+        Libro libro = (Libro) em.createQuery("SELECT l FROM Libro l WHERE l.isbn = :isbn").setParameter("isbn", isbn).getSingleResult();
         desconectar();
         return libro;
     }
@@ -45,10 +46,19 @@ public class LibroDAO extends DAO<Libro> {
         return libro;
     }
     
-    public Libro buscarPorAutor(String nombre) throws Exception {
+    public Collection<Libro> buscarPorAutor(String nombre) throws Exception {
         conectar();
-        Libro libro = (Libro) em.createQuery("SELECT l FROM Libro l WHERE l.autor.nombre LIKE :Autor").setParameter("titulo", "%" + nombre + "%").getSingleResult();
+        Collection<Libro> listaLibro;
+        listaLibro = (Collection<Libro>) (Libro) em.createQuery("SELECT l FROM Libro l WHERE l.autor.nombre LIKE :Autor").setParameter("nombre", "%" + nombre + "%").getResultList();
         desconectar();
-        return libro;
+        return listaLibro;
+    }
+    
+    public Collection<Libro> buscarPorEditorial(String nombre) throws Exception {
+        conectar();
+        Collection<Libro> listaLibro;
+        listaLibro = (Collection<Libro>) (Libro) em.createQuery("SELECT l FROM Libro l WHERE l.editorial.nombre LIKE :Editorial").setParameter("nombre", "%" + nombre + "%").getResultList();
+        desconectar();
+        return listaLibro;
     }
 }
