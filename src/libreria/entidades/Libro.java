@@ -38,7 +38,7 @@ public class Libro implements Serializable {
         this.anio = anio;
         this.ejemplares = ejemplares;
         this.ejemplaresPrestados = 0;
-        this.ejemplaresRestantes = ejemplares;
+        this.ejemplaresRestantes = ejemplaresRestantes;
         this.autor = autor;
         this.editorial = editorial;
     }

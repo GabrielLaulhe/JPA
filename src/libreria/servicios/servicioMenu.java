@@ -16,10 +16,14 @@ public class servicioMenu {
     Scanner leer = new Scanner(System.in);
     servicioAutor servA;
     servicioLibro servL;
+    servicioCliente servC;
+    servicioPrestamo servP;
 
     public servicioMenu() {
         servA = new servicioAutor();
         servL = new servicioLibro();
+        servC = new servicioCliente();
+        servP = new servicioPrestamo();
     }
 
     public void menu() {
@@ -33,7 +37,11 @@ public class servicioMenu {
                     + "3) Búsqueda de un libro por Título.\n"
                     + "4) Búsqueda de un libro/s por nombre de Autor.\n"
                     + "5) Búsqueda de un libro/s por nombre de Editorial\n"
-                    + "6) Salir.");
+                    + "6) Creación de un Cliente nuevo\n"
+                    + "7) Registrar el préstamo de un libro.\n"
+                    + "8) Devolución de un libro\n"
+                    + "9) Búsqueda de todos los préstamos de un Cliente.\n"
+                    + "10) Salir.");
 
             Integer opc = leer.nextInt();
             switch (opc) {
@@ -70,12 +78,25 @@ public class servicioMenu {
                     menu();
                     break;
                 case 6:
+                    servC.guardarCliente();
+                    menu();
                     break;
+                case 7:
+                    servP.guardarPrestamo();
+                    menu();
+                    break;
+                case 8:
+                    servP.menuDevolucionPrestamo();
+                    menu();
+                    break;
+                case 9:
+                    servP.buscarPrestamoCliente();
+                    break;
+
                 default:
                     System.out.println("Error");
                     menu();
             }
-
         } catch (Exception e) {
             System.out.println("Error" + e.getMessage());
             menu();

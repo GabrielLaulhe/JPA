@@ -39,6 +39,14 @@ public class LibroDAO extends DAO<Libro> {
         return libro;
     }
     
+    public Collection<Libro> buscarLibrosPorNombre(String titulo) throws Exception {
+        conectar();
+        Collection<Libro> libros;
+        libros = (Collection<Libro>) em.createQuery("SELECT l FROM Libro l WHERE l.titulo LIKE :titulo").setParameter("titulo", "%" + titulo+ "%").getSingleResult();
+        desconectar();
+        return libros;
+    }
+    
     public Libro buscarPorNombre(String titulo) throws Exception {
         conectar();
         Libro libro = (Libro) em.createQuery("SELECT l FROM Libro l WHERE l.titulo LIKE :titulo").setParameter("titulo", "%" + titulo+ "%").getSingleResult();
@@ -49,7 +57,7 @@ public class LibroDAO extends DAO<Libro> {
     public Collection<Libro> buscarPorAutor(String nombre) throws Exception {
         conectar();
         Collection<Libro> listaLibro;
-        listaLibro = (Collection<Libro>) (Libro) em.createQuery("SELECT l FROM Libro l WHERE l.autor.nombre LIKE :Autor").setParameter("nombre", "%" + nombre + "%").getResultList();
+        listaLibro = (Collection<Libro>) (Libro) em.createQuery("SELECT l FROM Libro l WHERE l.autor.nombre LIKE :nombre").setParameter("nombre", "%" + nombre + "%").getResultList();
         desconectar();
         return listaLibro;
     }
@@ -57,7 +65,7 @@ public class LibroDAO extends DAO<Libro> {
     public Collection<Libro> buscarPorEditorial(String nombre) throws Exception {
         conectar();
         Collection<Libro> listaLibro;
-        listaLibro = (Collection<Libro>) (Libro) em.createQuery("SELECT l FROM Libro l WHERE l.editorial.nombre LIKE :Editorial").setParameter("nombre", "%" + nombre + "%").getResultList();
+        listaLibro = (Collection<Libro>) (Libro) em.createQuery("SELECT l FROM Libro l WHERE l.editorial.nombre LIKE :nombre").setParameter("nombre", "%" + nombre + "%").getResultList();
         desconectar();
         return listaLibro;
     }
