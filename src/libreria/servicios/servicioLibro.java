@@ -32,7 +32,7 @@ public class servicioLibro {
 //    private Autor autor;
 //    @ManyToOne
 //    private Editorial editorial;
-    Scanner leer = new Scanner(System.in);
+    Scanner leer = new Scanner(System.in).useDelimiter("\n");
 
     LibroDAO dao;
     servicioAutor sa;
@@ -44,20 +44,27 @@ public class servicioLibro {
         dao = new LibroDAO();
     }
 
+        
     public Libro crearLibro() throws Exception {
+        System.out.println("Ingrese el isbn");
+        long isbn = leer.nextLong();
         System.out.println("Ingrese el titulo del libro");
         String titulo = leer.next();
         System.out.println("Ingrese el anio");
-        int anio = leer.nextInt();
+        //leer.next();
+        int anio = Integer.parseInt(leer.next()); // PARSEINT ES CUANDO ES INT Y VALUEOF CUANDO ES INTEGER
+        //int anio = leer.nextInt();
         System.out.println("Ingrese la cantidad de ejemplares que hay en stock");
-        int cantEjemplares = leer.nextInt();
+        int cantEjemplares = Integer.parseInt(leer.next());
 
         Autor a = sa.validarAutor();
 
         System.out.println("Ingrese el nombre de la editorial");
-        String nombre1 = leer.next();
-        Editorial e = se.validarEditorial(nombre1);
-        return new Libro(titulo, anio, cantEjemplares, a, e);
+        String nombreEditorial = leer.next();
+        System.out.println(nombreEditorial);
+        Editorial e = se.validarEditorial(nombreEditorial);
+        
+        return new Libro(isbn, titulo, anio, cantEjemplares, 0, cantEjemplares, a, e);
     }
 
     public void guardarLibro() throws Exception {
